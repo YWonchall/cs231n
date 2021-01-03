@@ -33,7 +33,7 @@ class LinearClassifier:
 
     # Run stochastic gradient descent to optimize W
     loss_history = []
-    for it in xrange(num_iters):
+    for it in range(num_iters):
       X_batch = None
       y_batch = None
 
@@ -48,7 +48,9 @@ class LinearClassifier:
       # Hint: Use np.random.choice to generate indices. Sampling with         #
       # replacement is faster than sampling without replacement.              #
       #########################################################################
-      pass
+      mask = np.random.choice(num_train, batch_size, replace=True)
+      X_batch = X[:,mask]
+      y_batch = y[mask]
       #########################################################################
       #                       END OF YOUR CODE                                #
       #########################################################################
@@ -62,7 +64,7 @@ class LinearClassifier:
       # TODO:                                                                 #
       # Update the weights using the gradient and the learning rate.          #
       #########################################################################
-      pass
+      self.W -= learning_rate*grad
       #########################################################################
       #                       END OF YOUR CODE                                #
       #########################################################################
@@ -90,13 +92,16 @@ class LinearClassifier:
     # TODO:                                                                   #
     # Implement this method. Store the predicted labels in y_pred.            #
     ###########################################################################
-    pass
+    #print(self.W.dot(X).shape)
+    y_pred = np.argmax(self.W.dot(X),axis=0)
+    #rint(y_pred.shape)
     ###########################################################################
     #                           END OF YOUR CODE                              #
     ###########################################################################
     return y_pred
   
   def loss(self, X_batch, y_batch, reg):
+    #print("ok")
     """
     Compute the loss function and its derivative. 
     Subclasses will override this.
@@ -117,6 +122,7 @@ class LinearSVM(LinearClassifier):
   """ A subclass that uses the Multiclass SVM loss function """
 
   def loss(self, X_batch, y_batch, reg):
+    #print("1")
     return svm_loss_vectorized(self.W, X_batch, y_batch, reg)
 
 
